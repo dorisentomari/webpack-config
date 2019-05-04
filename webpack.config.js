@@ -1,5 +1,11 @@
 const path = require('path');
 const HTMLPlugin = require('html-webpack-plugin');
+// 抽离所有的 css 代码，生成 css 文件
+const MiniCSSExtraPlugin = require('mini-css-extract-plugin');
+// 优化打包的 css 代码
+const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
+// 优化打包后的 JS 代码
+const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
 
 module.exports = {
   mode: 'development',
@@ -24,56 +30,54 @@ module.exports = {
   module: {
     rules: [
       {
+        test: /\.js$/,
+        use: {
+          loader: 'eslint-loader',
+          options: {
+            enforce: 'pre'
+          }
+        },
+      },
+      {
+        test: /\.js$/,
+        loader: 'babel-loader',
+        exclude: /node_modules/
+      },
+      {
         test: /\.css$/,
-        use: [
-          {
-            loader: 'style-loader',
-            options: {
-              insertAt: 'top'
-            }
-          },
-          'css-loader'
+        loader: [
+          MiniCSSExtraPlugin.loader,
+          'css-loader',
+          'postcss-loader'
         ],
         exclude: /node_modules/
       },
       {
         test: /\.less$/,
-        use: [
-          {
-            loader: 'style-loader',
-            options: {
-              insertAt: 'top'
-            }
-          },
+        loader: [
+          MiniCSSExtraPlugin.loader,
           'css-loader',
+          'postcss-loader',
           'less-loader'
         ],
         exclude: /node_modules/
       },
       {
         test: /\.styl$/,
-        use: [
-          {
-            loader: 'style-loader',
-            options: {
-              insertAt: 'top'
-            }
-          },
+        loader: [
+          MiniCSSExtraPlugin.loader,
           'css-loader',
+          'postcss-loader',
           'stylus-loader'
         ],
         exclude: /node_modules/
       },
       {
         test: /\.scss$/,
-        use: [
-          {
-            loader: 'style-loader',
-            options: {
-              insertAt: 'top'
-            }
-          },
+        loader: [
+          MiniCSSExtraPlugin.loader,
           'css-loader',
+          'postcss-loader',
           'sass-loader'
         ],
         exclude: /node_modules/
@@ -109,6 +113,19 @@ module.exports = {
         viewport: 'width=device-width, initial-scale=1, shrink-to-fit=no',
         'theme-color': '#4285f4'
       }
+    }),
+    new MiniCSSExtraPlugin({
+      filename: 'main.css'
     })
-  ]
+  ],
+  optimization: {
+    minimizer: [
+      new OptimizeCSSAssetsPlugin({}),
+      new UglifyJSPlugin({
+        cache: true,
+        parallel: true,
+        sourceMap: true
+      })
+    ]
+  }
 };

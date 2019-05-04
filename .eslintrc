@@ -1,0 +1,22 @@
+{
+  "parserOptions": {
+    "ecmaVersion": 5,
+    "sourceType": "script",
+    "ecmaFeatures": {}
+  },
+  "rules": {
+    "constructor-super": 2,
+    "for-direction": 2,
+    "getter-return": 2,
+    "no-case-declarations": 2,
+    "no-class-assign": 2,
+    "no-compare-neg-zero": 2,
+    "no-cond-assign": 2,
+    "no-console": 2
+  },
+  "env": {
+    "browser": true,
+    "commonjs": true,
+    "es6": true
+  }
+}
