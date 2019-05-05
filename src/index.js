@@ -1,14 +1,10 @@
 import './static/one.css';
-import './static/two.less';
-import './static/three.styl';
-import './static/four.scss';
-import '@babel/polyfill';
+import Logo from './static/logo.jpg';
 
-console.log('hello, webpack');
+let image = new Image();
 
-class A{
-  user = {
-    name: 'mark',
-    age: 18
-  }
-}
+console.log(Logo);
+
+image.src = Logo;
+
+document.body.appendChild(image);
