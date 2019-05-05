@@ -1,10 +1,8 @@
-import './static/one.css';
-import Logo from './static/logo.jpg';
+class Log {
+  constructor() {
+    console.log('log');
+    console.log(new Error('this is error'));
+  }
+}
 
-let image = new Image();
-
-console.log(Logo);
-
-image.src = Logo;
-
-document.body.appendChild(image);
+let log = new Log();
