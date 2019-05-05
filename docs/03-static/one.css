@@ -1,0 +1,14 @@
+body {
+	background: orange;
+}
+
+.one {
+	font-size: 30px;
+	color: #00ff4f;
+}
+
+.header {
+	background: url('./logo.jpg') no-repeat;
+	height: 240px;
+}
+
