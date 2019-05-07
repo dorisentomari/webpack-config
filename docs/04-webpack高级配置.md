@@ -2,11 +2,9 @@
 
 + 我们每次打包之前，就想要删掉原来打包的目录里的文件，我们可以使用一个插件 `clean-webpack-plugin`，注意版本，不同的版本使用方法是不一样的
 
-+ 直接在 plugins 里添加即可
-
-+ 1.x 使用，`new CleanWebpackPlugin([path.resolve(__dirname, 'dist')])`
-
-+ 2.x 使用 `new CleanWebpackPlugin()`
++ 使用比较简单，直接在 plugins 里添加即可
+  + 1.x 版本使用，`new CleanWebpackPlugin([path.resolve(__dirname, 'dist')])`
+  + 2.x 版本使用， `new CleanWebpackPlugin()`，不添加参数，默认是删除打包生成的目录
 
 # 2. 多页面配置
 
@@ -44,6 +42,23 @@ module.exports = {
   + 多个 js 出口，出口就不能写死，需要使用变量的形式，使用 `[name].js`，这里的 name 对应入口里的 key
   + 因为有多个页面，每个页面可能有不同的模板内容，所以我们使用多个 HTMLPlugin，同时打包出的 HTML 文件名也不能一样，每个页面需要使用到的代码块也不一样，所以需要给每一个页面配置一个 chunks，因为页面可能会需要多个代码块，所以 chunks 是一个数组，每一个元素是入口里的 key，这里需要一一对应，不然是不生效的
 
++ 区分 chunk，module
+  + chunk 是一个代码块，有一个 chunkId，这个 chunk 可能包含多个模块，比如 pageA 页面需要的是 A，B，C 模块，那么此时的 chunk 就包含了 A，B，C
+  + module 是一个模块，比如 `a.js`，webpack 里每个文件都是一个模块，所以 a.js 是一个 module
+  + 以下边的代码为例，文件最开始的 0，1，2，3 等，就是 chunkId，这个 chunk 可能包括了很多的模块，最终生成了一个 chunk
+  + chunk 有利于分割代码，pageA 页面只需要 chunk1，那么只需要加载 chunk1 的代码就可以，pageB，pageC 等页面，可以预加载，或者用到这个页面的时候再加载对应的 chunk
+
+```
+static/js/0.3a91ecddb7d88c37bcac.js     1.6 MB       0  [emitted]
+static/js/1.58bf968713a72f675411.js    75.5 kB       1  [emitted]
+static/js/2.58ef09f2165baed4e87f.js    56.2 kB       2  [emitted]
+static/js/3.27af2d97f5db70fda453.js    65.7 kB       3  [emitted]
+static/js/4.2577c7354803078e6c95.js      19 kB       4  [emitted]
+static/js/5.9cfa2c0cf963135a760b.js    41.6 kB       5  [emitted]
+static/js/6.a1b37170f66141e48b3e.js    56.6 kB       6  [emitted]
+static/js/7.bb90be261d7079a65894.js    13.2 kB       7  [emitted]
+```
+
 # 3. source-map
 
 + source-map 的作用是为了映射源码，因为 webpack 会把源码进行编译打包，最后生成的代码看起来比较难懂，如果代码报错了，那么我们可以使用 source-map 进行映射到源码， 查看具体是哪里报错
@@ -78,3 +93,5 @@ module.exports = {
   }
 }
 ```
+
++ 完整的代码可以查看 04-webpack.config.js

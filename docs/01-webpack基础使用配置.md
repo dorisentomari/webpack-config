@@ -11,9 +11,9 @@
 
 # 2. 简单配置 webpack
 
-+ 在根目录建立一个 webpack.config.js 或 webpackfile.js 的文件，修改入口出口，开发模式
++ 在根目录建立一个 webpack.config.js 或 webpackfile.js 的文件，修改入口出口和开发模式
 	+ 开发模式是 development
-	+ target 分为浏览器和 Node，这里我们采用 browser
+	+ target 分为 web 和 Node，这里我们采用 web
 	+ 入口文件是 src/index.js
 	+ 出口目录是 /dist，出口文件是 /dist/bundle.js
 
@@ -35,11 +35,11 @@ module.exports = {
 
 + 打包后生成的代码文件，可以直接在浏览器或 Node 里运行，因为 webpack 自己实现了一套引用模块的方法，这个方法可以兼容浏览器端，也可以兼容 Node 端
 
-+ 比如我们在 src/index.js 里边输入 `console.log('hello, webpack');`，在 dist 目录下新建一个 HTML 文件，直接加载 bundle.js 资源，就可以在浏览器的控制台里看到 hello, webpack ，这就表示，我们最基本的 webpack 已经配置成功
++ 比如我们在 src/index.js 里边输入 `console.log('hello, webpack');`，在 dist 目录下新建一个 HTML 文件，在 HTML 页面里直接加载 bundle.js 资源，就可以在浏览器的控制台里看到 hello, webpack ，这就表示，我们最基本的 webpack 已经配置成功
 
 # 3. 配置 package.json 的 scripts 的启动命令
 
-+ 如果我们直接在命令行输入 `npx webpack` 进行默认配置，这样不太方便，我们需要自定义命令及参数
++ 如果我们直接在命令行输入 `npx webpack` 进行默认配置，这是默认的命令，默认的命令用起来，不一定符合我们的需要，所以可以自定义命令及参数
 
 + 在 package.json 里添加一条命令 `"build": "webpack --config webpack.config.js --watch"`，这个就是使用 npm run build 的命令，就会调用 `webpack --config webpack.config.js --watch` 的命令，--config 参数是为了指定配置文件，配置文件的名字就是 webpack.config.js，--watch 的意思是开启监听，一旦监听到代码变动，会在多少毫秒内重新打包
 
@@ -69,36 +69,36 @@ module.exports = {
 		contentBase: './dist',
 		// 是否开启 gzip 压缩
 		compress: true
-	}
+  }
 }
 ```
 
 + 同时在 package.json 里添加一条启动 devServer 的命令 `"dev": "webpack-dev-server"`
 
-+ 这样在 webpack 打包的时候，就可以开启本地服务
++ 运行命令 `npm run dev`，这样在 webpack 打包的时候，就可以开启本地服务，直接用浏览器访问本地服务即可
 
 # 5. 添加 HTML 模板
 
-+ 我们希望使用一个 HTML 模板，通过 webpack 的配置去生成一个 HTML 文件，比如配置 HTML 是否压缩，是否去掉注释，是否去掉标签上的引号等，我们采用 html-webpack-plugin 这个插件
++ 我们希望使用一个 HTML 模板，通过 webpack 的配置去生成一个 HTML 文件，比如配置 HTML 是否压缩，引入的静态资源文件，是否去掉注释，是否去掉标签上的引号等，我们采用 html-webpack-plugin 这个插件
 
-+ 在 webpack 里，插件的写法都是类似的，关于 HTML 模板的具体使用，这个根据需要使用，比如不想压缩，就可以不用压缩生成的 HTML 实际上没什么大的差别，有些配置主要是为了提高浏览器的渲染效率而设置的，学习阶段可以淡化这些
++ 在 webpack 里，插件的写法都是类似的，关于 HTML 模板的具体使用，这个根据需要使用，比如不想压缩，就可以不用压缩生成的 HTML 实际上没什么大的差别，有些配置主要是为了提高浏览器的渲染效率而设置的
 
 ```javascript
 const HTMLPlugin = require('html-webpack-plugin');
 
 module.exports = {
   plugins: [
-		new HTMLPlugin({
-			// 引入的模板的路径
-			template: './src/index.html',
-			// 生成的 HTML 的文件名
-			filename: 'index.html',
-			// 生成的 HTML 文件的 title 标签的内容
-			title: 'webpack 打包的模板',
-			// 在引入的文件后边添加哈希字符串，避免缓存
-			hash: true,
-			// 压缩
-			minify: {
+    new HTMLPlugin({
+      // 引入的模板的路径
+      template: './src/index.html',
+      // 生成的 HTML 的文件名
+      filename: 'index.html',
+      // 生成的 HTML 文件的 title 标签的内容
+      title: 'webpack 打包的模板',
+      // 在引入的文件后边添加哈希字符串，避免缓存
+      hash: true,
+      // 压缩
+      minify: {
 				// 压缩代码，去掉所有的空白
 				collapseWhitespace: true,
 				// 去掉注释
@@ -111,19 +111,19 @@ module.exports = {
 				removeStyleLinkTypeAttributes: true,
 				// 去掉标签上属性值的引号
 				removeAttributeQuotes: true
-			},
-			meta: {
+      },
+      meta: {
 				viewport: 'width=device-width, initial-scale=1, shrink-to-fit=no',
 				'theme-color': '#4285f4'
-			}
-		})
-	]
+      }
+    })
+  ]
 };
 ```
 
 # 6. 引入 CSS 样式文件
 
-+ 在 webpack 里，每一个文件都是一个模块，不管是 js 文件，html 文件，css 文件或者是字体图片文件，都是一个模块，针对不同的模块，我们需要采用不同的加载器(loader)来进行解析，解析后的代码 webpack 才能识别
++ 在 webpack 里，每一个文件都是一个模块，不管是 js 文件，html 文件，css 文件或者是字体图片文件，都是一个模块，针对不同的模块，我们需要采用不同的加载器(loader)来进行解析，解析后的代码 webpack 才能识别打包
 
 + 所以为了解析 css 代码，我们需要安装 style-loader 和 css-loader 模块，style-loader 的目的是为了把 css 样式注入到页面里，css-loader 的目的是为了解析 css 文件
 
@@ -132,6 +132,8 @@ module.exports = {
 + 针对每一个 loader，都可以使用对象的形式，这样可以对每一个 loader 进行特殊的配置，比如我们要把在 html 页面里的添加了 style 标签，那么直接使用，样式是会被打包后的样式覆盖的。所以我们可以修改 options 属性，把代码插入到打包后的代码后边，这样优先级会比打包后的 css 优先级要高，所以我们使用 insertAt 属性
 
 + 我们修改 webpack.config.js 里的代码，记住 loader 的使用顺序是从右往左，比如 less 处理，先使用 less-loader 把 less 代码处理为 css，然后再通过 css-loader 处理，最后通过 styler-loader 处理
+
++ exclude 的意思是不处理哪些文件，一般来说，node_modules 文件夹下第三方代码的我们都不处理，只处理自己写的代码
 
 ```javascript
 module.exports = {
@@ -158,6 +160,9 @@ module.exports = {
 # 7. 使用 less/stylus/sass
 
 + 使用 less/stylus/sass，我们就需要使用对应的解释器和 loader
+	+ less，需要下载 less 和 less-loader
+	+ stylus，需要下载 stylus 和 stylus-loader
+	+ sass，需要下载 node-sass 和 saas-loader
 
 ```javascript
 module.exports = {
@@ -218,7 +223,7 @@ module.exports = {
 			 ],
 			 exclude: /node_modules/
 			}
-			]
+    ]
   }
 }
 ```
