@@ -1,8 +1,9 @@
-class Log {
-  constructor() {
-    console.log('log');
-    console.log(new Error('this is error'));
-  }
-}
+let xhr = new XMLHttpRequest();
 
-let log = new Log();
+xhr.open('GET', '/user', true);
+
+xhr.onload = function () {
+  console.log(xhr.response);
+};
+
+xhr.send();

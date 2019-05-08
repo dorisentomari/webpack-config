@@ -1,10 +1,62 @@
-# 1. 删除某个目录
+# 1. webpack 的小插件
+
+## 1.1 删除某个目录
 
 + 我们每次打包之前，就想要删掉原来打包的目录里的文件，我们可以使用一个插件 `clean-webpack-plugin`，注意版本，不同的版本使用方法是不一样的
 
 + 使用比较简单，直接在 plugins 里添加即可
   + 1.x 版本使用，`new CleanWebpackPlugin([path.resolve(__dirname, 'dist')])`
   + 2.x 版本使用， `new CleanWebpackPlugin()`，不添加参数，默认是删除打包生成的目录
+
+## 1.2 拷贝某个目录
+
++ 把某个目录拷贝到特定的目录，比如从(from) src/public 文件夹复制到(to) dist/public 文件夹下
+
++ 参数是一个数据，表示可以接收多个对象元素，拷贝多个目录
+
+```javascript
+module.exports = {
+  plugins: [
+    new CopyWebpackPlugin([
+      {
+        from: path.resolve(__dirname, './src/public'),
+        to: path.resolve(__dirname, './dist/public')
+      }
+    ])
+  ]
+};
+```
+
+## 1.3 banner
+
++ 这个插件的目的是在打包生成的 js 文件顶部，添加一行注释，可以是版本，作者，时间信息等
+
+```javascript
+module.exports = {
+  plugins: [
+    new Webpack.BannerPlugin('made by carl')
+  ]
+};
+```
+
+
+## 1.4 更新
+
++ 热更新插件，new Webpack.HotModuleReplacementPlugin()
+
++ 更新的模块路径，new Webpack.NamedModulesPlugin()
+
+```javascript
+module.exports = {
+  plugins: [
+    // 热更新插件
+    new Webpack.HotModuleReplacementPlugin(),
+    // 打印更新的模块路径
+    new Webpack.NamedModulesPlugin(),
+  ]
+};
+```
+
 
 # 2. 多页面配置
 
