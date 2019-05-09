@@ -1,31 +1,14 @@
 const path = require('path');
 const HTMLPlugin = require('html-webpack-plugin');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
+const Webpack = require('webpack');
 
 module.exports = {
-  mode: 'development',
   target: 'web',
   entry: path.resolve(__dirname, 'src/index.js'),
   output: {
     filename: "bundle.js",
     path: path.resolve(__dirname, 'dist')
-  },
-  devServer: {
-    // 代理跨域
-    // proxy: {
-    //   '/api': {
-    //     target: 'http://localhost:3000',
-    //     pathRewrite: {'^/api' : ''}
-    //   }
-    // },
-    // 前端模拟数据
-    // before (app) {
-    //   app.get('/user', (req, res) => {
-    //     res.json({name: 'carl'});
-    //   });
-    // },
-    // 有服务端，不想用代理，在服务端开启服务，端口用服务端的端口
-
   },
   plugins: [
     new CleanWebpackPlugin(),
@@ -40,7 +23,24 @@ module.exports = {
         test: /\.js$/,
         loader: 'babel-loader',
         exclude: /node_modules/
+      },
+      {
+        test: /\.css$/,
+        use: ['style-loader', 'css-loader']
       }
     ]
+  },
+  resolve: {
+    modules: [path.resolve('node_modules')],
+    // 扩展名
+    extensions: ['.js', '.css', '.json'],
+    // 入口文件的名字
+    // mainFiles: [],
+    // 入口的字段，从包的 package.json 里查找
+    mainFields: ['style', 'main'],
+    // 配置别名
+    alias: {
+      bootstrap: 'bootstrap/dist/css/bootstrap.css'
+    }
   }
 };

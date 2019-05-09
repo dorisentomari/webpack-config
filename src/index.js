@@ -1,9 +1,14 @@
-let xhr = new XMLHttpRequest();
+import 'bootstrap';
+import './style'
 
-xhr.open('GET', '/user', true);
+if (DEV === 'dev') {
+  console.log('dev');
+} else {
+  console.log('prod');
+}
 
-xhr.onload = function () {
-  console.log(xhr.response);
-};
+console.log(FLAG);
+console.log(EXPRESSION);
+console.log(typeof FLAG);
 
-xhr.send();
+
