@@ -19,11 +19,11 @@ module.exports = {
     //   }
     // },
     // 前端模拟数据
-    before (app) {
-      app.get('/user', (req, res) => {
-        res.json({name: 'carl'});
-      });
-    },
+    // before (app) {
+    //   app.get('/user', (req, res) => {
+    //     res.json({name: 'carl'});
+    //   });
+    // },
     // 有服务端，不想用代理，在服务端开启服务，端口用服务端的端口
 
   },
