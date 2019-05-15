@@ -6,11 +6,11 @@
 
 + 所以我们也要有两个，一个是需要打包的 webpack.config.js 配置文件，一个是命令行打包工具
 
-+ 我们需要再新建一个命令行工具项目，就叫做 carl-pack，这也是我们命令行的命令
++ 我们需要再新建一个命令行工具项目，就叫做 carl-pack，这也是我们命令行的全局命令
 
 # 2. 源代码
 
-+ 我们的源代码比较简单，所以直接看代码就可以，主要就是解析 require 语法
++ 我们的源代码比较简单，所以直接看代码就可以，主要就是解析 require 语法，在浏览器中也可以运行代码
 
 + src/base/b.js
 
@@ -32,20 +32,37 @@ let str  = require('./a');
 console.log(str);
 ```
 
+# 3. webpack.config.js 的配置
 
-# 2. carl-pack 项目介绍
++ 我们先对 webpack.config.js 做配置，这样我们在解析的时候，就知道需要使用到哪些字段内容
+
++ 我们只定义最简单的入口和出口，之后我们会定义 rules 和 plugins
+
+```javascript
+const path = require('path');
+
+module.exports = {
+  entry: path.resolve(__dirname, './src/index.js'),
+  output: {
+    filename: "bundle.js",
+    path: path.resolve(__dirname, 'dist')
+  }
+};
+```
+
+# 4. carl-pack 项目介绍
 
 + 首先我们要知道 carl-pack 项目的目的，然后再梳理一下 carl-pack 项目的流程
 
 + 目的：实际上，carl-pack 项目可以理解为 webpack-cli + webpack，就是一个命令行工具，通过这个命令行工具，我们可以打包源代码，最终生成打包后的代码
 
 + 流程：
-  + 创建全局的 carl-pack 命令，就像是全局安装 webpack 一样，我们也要创建一个 carl-pack 的全局命令
+  + 创建全局的 carl-pack 命令，就像是全局 webpack 命令一样，我们也要创建一个 carl-pack 的全局命令
   + 通过 carl-pack 命令解析 webpack.config.js 文件。当然，我们可以不使用 webpack.config.js 这个文件名，可以使用 carl-pack.config.js 文件名，这个是可以自己定义的，都可以的。由于我们还是采用 webpack 的配置方式，所以我们还是叫 webpack.config.js 这个名字
-  + 根据 webpack.config.js 的配置，我们通过 AST 编译代码，并且加载我们自己写的 loader 和 plugin
+  + 根据 webpack.config.js 的配置，我们通过解析源代码，并且加载我们自己写的 loader 和 plugin
   + 最终使用一个模板引擎，把渲染好的字符串输出到目标文件夹，生成打包后的代码
 
-# 3. 配置全局 `carl-pack` 命令
+# 5. 配置全局 `carl-pack` 命令
 
 + 首先我们先创建一个 carl-pack 的文件夹，进入文件夹，使用 `npm init -y` 进行初始化
 
@@ -63,6 +80,7 @@ console.log(str);
   + `#!/usr/bin/env node` 这种用法是为了防止操作系统用户没有将 node 装在默认的 `/usr/bin` 路径里。当系统看到这一行的时候，首先会到 env 设置里查找 node 的安装路径，再调用对应路径下的解释器程序完成操作。
   + 简单来说，就是为了调用解释器，在 python 里也有这样的用法
   + 然后直接引入了 src/index.js 文件
+  + 我们没有直接在 www 文件里写代码，是因为我们要对代码统一管理，把 www 文件作为一个执行的入口文件即可
 
 ```javascript
 #! /usr/bin/env node
@@ -89,16 +107,4 @@ require('../src/index');
 
 + 这个时候，就在全局新建了一条命令，叫做 `carl-pack`，直接在命令行输入 `carl-pack` 或者 `npx carl-pack`，就会输出我们在 src/index.js 里 console 的内容 `hello, carl-pack`
 
-+ 如果正确输出了内容，那么说明全局命令已经配置成功
-
-
-
-
-
-
-
-
-
-
-
-
++ 如果正确输出了 console.log 的内容，那么说明全局命令已经配置成功
