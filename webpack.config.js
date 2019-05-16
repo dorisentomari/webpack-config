@@ -1,6 +1,4 @@
 const path = require('path');
-const P = require('./src/plugins/P');
-const P1 = require('./src/plugins/P1');
 
 module.exports = {
   target: 'web',
@@ -10,19 +8,31 @@ module.exports = {
     filename: "bundle.js",
     path: path.resolve(__dirname, 'dist')
   },
+  resolveLoader: {
+    // alias: {
+    //   loader1: path.resolve(__dirname, './src/loaders', 'loader1.js')
+    // },
+    modules: ['node_modules', path.resolve(__dirname, './src/loaders')]
+  },
+  devtool: 'source-map',
   module: {
     rules: [
       {
-        test: /\.less$/,
-        use: [
-          path.resolve(__dirname, './src/loader', 'style-loader.js'),
-          path.resolve(__dirname, './src/loader', 'less-loader.js')
-        ]
+        test: /\.js$/,
+        // use: {
+        //   loader: 'loader1',
+        //   options: {
+        //     name: 'mark'
+        //   }
+        // }
+        // loader 顺序, pre, normal, inline, post
+        use: {
+          loader: 'babel-loader',
+          options: {
+            presets: ['@babel/preset-env']
+          }
+        }
       }
     ]
-  },
-  plugins: [
-    new P(),
-    new P1()
-  ]
+  }
 };
