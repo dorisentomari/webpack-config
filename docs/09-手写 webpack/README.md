@@ -108,3 +108,24 @@ require('../src/index');
 + 这个时候，就在全局新建了一条命令，叫做 `carl-pack`，直接在命令行输入 `carl-pack` 或者 `npx carl-pack`，就会输出我们在 src/index.js 里 console 的内容 `hello, carl-pack`
 
 + 如果正确输出了 console.log 的内容，那么说明全局命令已经配置成功
+
+
+# 6. 解析 webpack.config.js 文件
+
+## 6.1 解析准备
+
++ 我们已经创建了全局命令，那么我们就需要通过全局命令去解析 webpack.config.js
+
++ 那么我们需要知道解析的原理与流程
+
++ 原理
+  + 由于 webpack.config.js 导出的是一个对象，所以我们直接使用导出的对象
+  + 这个对象里有配置信息，entry ，output 和 module 的 rules 信息，其他的我们暂时都不做解析
+  + 解析对象完成后，我们开始打包，通过 fs 模块，生成打包后的文件代码
+
++ 流程
+  + 第 1 步，我们在使用 carl-pack 的时候，一定是在项目的根目录，所以，我们要在根目录通过 path 模块找到 webpack.config.js 文件，获取到 entry ，output 和 module 的 rules 信息
+  + 第 2 步，从入口文件里找到文件的依赖，执行并创建文件的依赖关系，这个意思就是说，比如 index.js 引用了 a.js 和 b.js，那么 index.js 与 a.js 和 b.js 就有了依赖关系，但是 a.js 和 b.js 没有依赖关系
+  + 第 3 步，使用 AST 对源代码进行编译，编译成浏览器能够识别的代码
+  + 第 4 步，使用模板生成代码
+  + 第 5 步，直接使用代码
