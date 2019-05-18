@@ -3,7 +3,7 @@ const path = require('path');
 
 class UploadQiniuPlugin {
   constructor(options = {}) {
-    let {bucket, domain, accessKey, secretKey} = options;
+    let { bucket = '', domain = "", accessKey = '', secretKey = '' } = options;
     let mac = new qiniu.auth.digest.Mac(accessKey, secretKey);
     let putPolicy = new qiniu.rs.PutPolicy({scope: bucket});
     this.uploadToken = putPolicy.uploadToken(mac);
@@ -25,7 +25,7 @@ class UploadQiniuPlugin {
 
   upload(filename) {
     return new Promise((resolve, reject) => {
-      let realPath = path.resolve(__dirname, '../dist', filename);
+      let realPath = path.resolve(__dirname, '../../dist', filename);
       this.formUploader.putFile(this.uploadToken, filename, realPath, this.putExtra, (err, res) => {
         console.log(res);
         if (err) {
