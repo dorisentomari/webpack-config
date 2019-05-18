@@ -4,6 +4,7 @@ function loader (source) {
   let css = '';
 
   less.render(source, (err, c) => {
+    console.log(c);
     css = c.css;
   });
 

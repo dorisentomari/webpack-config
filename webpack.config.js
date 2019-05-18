@@ -12,13 +12,14 @@ module.exports = {
     // alias: {
     //   loader1: path.resolve(__dirname, './src/loaders', 'loader1.js')
     // },
-    modules: ['node_modules', path.resolve(__dirname, './src/loaders')]
+    modules: ['node_modules', path.resolve(__dirname, './src/loader')]
   },
   devtool: 'source-map',
+  // watch: true,
   module: {
     rules: [
-      {
-        test: /\.js$/,
+      // {
+      //   test: /\.js$/,
         // use: {
         //   loader: 'loader1',
         //   options: {
@@ -26,12 +27,36 @@ module.exports = {
         //   }
         // }
         // loader 顺序, pre, normal, inline, post
+        // use: {
+        //   loader: 'babel-loader',
+        //   options: {
+        //     presets: ['@babel/preset-env']
+        //   }
+        // }
+      // }
+      // {
+      //   test: /\.js$/,
+      //   use: {
+      //     loader: 'banner-loader',
+      //     options: {
+      //       text: 'hello, banner-loader',
+      //       filename: path.resolve(__dirname, 'src/banner-template.txt')
+      //     }
+      //   }
+      // },
+      {
+        test: /\.jpg$/,
         use: {
-          loader: 'babel-loader',
+          loader: 'url-loader',
           options: {
-            presets: ['@babel/preset-env']
+            limit: 200 * 1024
           }
         }
+      },
+      {
+        test: /\.less$/,
+        use: ['style-loader', 'css-loader', 'less-loader'],
+        // use: 'less-loader'
       }
     ]
   }
