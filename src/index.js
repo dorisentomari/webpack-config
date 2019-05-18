@@ -5,5 +5,6 @@
 // img.src = imgPath;
 //
 // document.body.appendChild(img);
+import './style.css';
 
-import './index.less';
+console.log('hello, index file');

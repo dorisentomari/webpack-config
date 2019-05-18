@@ -1,4 +1,11 @@
 const path = require('path');
+// const DonePlugin = require('./src/plugins/DonePlugin');
+// const AsyncPlugin = require('./src/plugins/AsyncPlugin');
+const FileListPlugin = require('./src/plugins/FileListPlugin');
+const InlineSourcePlugin = require('./src/plugins/InlineSourcePlugin');
+const HTMLPlugin = require('html-webpack-plugin');
+const MiniCSSExtractPlugin = require('mini-css-extract-plugin');
+const UploadQiniuPlugin = require('./src/plugins/UploadQiniuPlugin');
 
 module.exports = {
   target: 'web',
@@ -8,56 +15,37 @@ module.exports = {
     filename: "bundle.js",
     path: path.resolve(__dirname, 'dist')
   },
-  resolveLoader: {
-    // alias: {
-    //   loader1: path.resolve(__dirname, './src/loaders', 'loader1.js')
-    // },
-    modules: ['node_modules', path.resolve(__dirname, './src/loader')]
-  },
-  devtool: 'source-map',
-  // watch: true,
   module: {
     rules: [
-      // {
-      //   test: /\.js$/,
-        // use: {
-        //   loader: 'loader1',
-        //   options: {
-        //     name: 'mark'
-        //   }
-        // }
-        // loader 顺序, pre, normal, inline, post
-        // use: {
-        //   loader: 'babel-loader',
-        //   options: {
-        //     presets: ['@babel/preset-env']
-        //   }
-        // }
-      // }
-      // {
-      //   test: /\.js$/,
-      //   use: {
-      //     loader: 'banner-loader',
-      //     options: {
-      //       text: 'hello, banner-loader',
-      //       filename: path.resolve(__dirname, 'src/banner-template.txt')
-      //     }
-      //   }
-      // },
       {
-        test: /\.jpg$/,
-        use: {
-          loader: 'url-loader',
-          options: {
-            limit: 200 * 1024
-          }
-        }
-      },
-      {
-        test: /\.less$/,
-        use: ['style-loader', 'css-loader', 'less-loader'],
-        // use: 'less-loader'
+        test: /\.css$/,
+        use: [
+          MiniCSSExtractPlugin.loader,
+          'css-loader'
+        ]
       }
     ]
-  }
+  },
+  plugins: [
+    // new DonePlugin(),
+    // new AsyncPlugin(),
+    new MiniCSSExtractPlugin({
+      filename: 'main.css'
+    }),
+    new HTMLPlugin({
+      template: './public/index.html'
+    }),
+    // new FileListPlugin({
+    //   filename: 'fileList.md'
+    // }),
+    // new InlineSourcePlugin({
+    //   match: /\.(js|css)$/
+    // })
+    new UploadQiniuPlugin({
+      bucket: '',
+      domain: '',
+      accessKey: '',
+      secretKey: ''
+    })
+  ]
 };
