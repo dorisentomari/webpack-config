@@ -28,25 +28,11 @@ module.exports = {
     ]
   },
   plugins: [
-    // new DonePlugin(),
-    // new AsyncPlugin(),
     new MiniCSSExtractPlugin({
       filename: 'main.css'
     }),
     new HTMLPlugin({
       template: './public/index.html'
-    }),
-    // new FileListPlugin({
-    //   filename: 'fileList.md'
-    // }),
-    // new InlineSourcePlugin({
-    //   match: /\.(js|css)$/
-    // })
-    new UploadQiniuPlugin({
-      bucket: '',
-      domain: '',
-      accessKey: '',
-      secretKey: ''
     })
   ]
 };
