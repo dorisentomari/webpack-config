@@ -33,9 +33,7 @@ module.exports = {
 };
 ```
 
-
 # 2. 最简单的 loader
-
 + loader1.js，实际上这就是一个最简单的 loader，这个 loader 的功能就是输出一个字符串 loader1，再输出源代码，然后把 source 返回
 
 ```javascript
@@ -332,4 +330,3 @@ function loader(source) {
 
 module.exports = loader;
 ```
-

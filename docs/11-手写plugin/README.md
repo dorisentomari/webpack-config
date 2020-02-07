@@ -1,9 +1,6 @@
 # 1. webpack 插件
 
-
-
 # 2. 加载插件的对象
-
 + Compiler 编译对象
   + run 开始运行
   + compile 开始编译
@@ -11,7 +8,7 @@
   + make 创建模块对象
   + emit 发射文件
   + done 完成
-  
+
 + Compilation 资源构建
   + buildModule 创建模块
   + normalModuleLoader 普通模块加载
@@ -38,7 +35,3 @@ Template 模板
   + bootstrap 启动
   + localVars 变量
   + render 渲染
-
-
-
-

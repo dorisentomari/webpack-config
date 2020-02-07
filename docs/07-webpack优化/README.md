@@ -10,7 +10,6 @@ moment.locale('zh-cn');
 
 console.log(jquery);
 
-
 let time = moment().endOf('day').fromNow();
 
 console.log(time);
@@ -163,10 +162,20 @@ module.exports = {
 + 这里的 manifest.json 必须是创建 dll 时 plugins 里定义的 path，因为 webpack 不直接引用 react_dll.js，webpack 引用的是 manifest.json，从 manifest.json 里解析找到对应的 react_dll.js
 
 ```javascript
+const Webpack = require('webpack');
+const AddAssetPlugin = require('add-asset-html-webpack-plugin');
+
 module.exports = {
   plugins: [
+    // 让 webpack 打包的时候，检查一下 manifest.json 里的包是否已经打包过
+    // 如果打包过，那么就不再打包，直接使用
     new Webpack.DllReferencePlugin({
       manifest: require(path.resolve(__dirname, 'dist', 'manifest.json'))
+    }),
+    // 添加资源插件，把打包好的 dll 文件引入到 HTML 页面中
+    // 这个插件的顺序必须是在 HTMLPlugin 之后
+    new AddAssetPlugin({
+      filepath: path.resolve(__dirname, 'dist', 'react.dll.js')
     })
   ]
 };
@@ -177,7 +186,6 @@ module.exports = {
 + 我们需要在 index.html 模板中手动引入这个 dll 文件，不然是不会引用这个 dll 文件的
 
 + 完整的代码可以查看 07-webpack.config.02.js
-
 
 ## 3.4 library 和 libraryTarget
 + output.library 配置的是导出库的名称，通常和 libraryTarget 放在一起使用

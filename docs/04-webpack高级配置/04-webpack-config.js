@@ -11,8 +11,8 @@ module.exports = {
     filename: "bundle.js",
     path: path.resolve(__dirname, 'dist')
   },
-  // source-map，源码映射，单独生成一份soucemap 文件，出错后，会标识出错误的列和行，特点是大而全
-  // eval-soure-map，不会产生单独的文件，但是会显示行和列
+  // source-map，源码映射，单独生成一份 soucemap 文件，出错后，会标识出错误的列和行，特点是大而全
+  // eval-source-map，不会产生单独的文件，但是会显示行和列
   // cheap-module-source-map，不会产生列，是一个单独的映射文件，可以保留用来调试
   // cheap-module-eval-source-map 不会产生文件，会集成在打包后的文件里，不会产生行和列
   devtool: 'source-map',

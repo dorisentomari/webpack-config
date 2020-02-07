@@ -12,8 +12,8 @@ const MiniCSSExtraPlugin = require('mini-css-extract-plugin');
 module.exports = {
   plugins: [
     new MiniCSSExtraPlugin({
-			filename: 'main.css'
-		})
+      filename: 'main.css'
+    })
   ]
 };
 ```
@@ -23,48 +23,48 @@ module.exports = {
 ```javascript
 module.exports = {
   module: {
-		rules: [
-			{
-				test: /\.css$/,
-				loader: [
-					MiniCSSExtraPlugin.loader,
-					'css-loader',
-					'postcss-loader'
-				],
-				exclude: /node_modules/
-			},
-			{
-				test: /\.less$/,
-				loader: [
-					MiniCSSExtraPlugin.loader,
-					'css-loader',
-					'postcss-loader',
-					'less-loader'
-				],
-				exclude: /node_modules/
-			},
-			{
-				test: /\.styl$/,
-				loader: [
-					MiniCSSExtraPlugin.loader,
-					'css-loader',
-					'postcss-loader',
-					'stylus-loader'
-				],
-				exclude: /node_modules/
-			},
-			{
-				test: /\.scss$/,
-				loader: [
-					MiniCSSExtraPlugin.loader,
-					'css-loader',
-					'postcss-loader',
-					'sass-loader'
-				],
-				exclude: /node_modules/
-			}
-		]
-	}
+    rules: [
+      {
+        test: /\.css$/,
+        loader: [
+          MiniCSSExtraPlugin.loader,
+          'css-loader',
+          'postcss-loader'
+        ],
+        exclude: /node_modules/
+      },
+      {
+        test: /\.less$/,
+        loader: [
+          MiniCSSExtraPlugin.loader,
+          'css-loader',
+          'postcss-loader',
+          'less-loader'
+        ],
+        exclude: /node_modules/
+      },
+      {
+        test: /\.styl$/,
+        loader: [
+          MiniCSSExtraPlugin.loader,
+          'css-loader',
+          'postcss-loader',
+          'stylus-loader'
+        ],
+        exclude: /node_modules/
+      },
+      {
+        test: /\.scss$/,
+        loader: [
+          MiniCSSExtraPlugin.loader,
+          'css-loader',
+          'postcss-loader',
+          'sass-loader'
+        ],
+        exclude: /node_modules/
+      }
+    ]
+  }
 };
 ```
 
@@ -83,33 +83,33 @@ const MiniCSSExtraPluginLess = require('mini-css-extract-plugin');
 module.exports = {
   plugins: [
     new MiniCSSExtraPlugin({
-			filename: 'main.css'
-		}),
-		new MiniCSSExtraPluginLess({
-			filename: 'main.less.css'
-		})
+      filename: 'main.css'
+    }),
+    new MiniCSSExtraPluginLess({
+      filename: 'main.less.css'
+    })
   ],
   module: {
     rules: [
       {
-				test: /\.css$/,
-				loader: [
-					MiniCSSExtraPlugin.loader,
-					'css-loader',
-					'postcss-loader'
-				],
-				exclude: /node_modules/
-			},
-			{
-				test: /\.less$/,
-				loader: [
-					MiniCSSExtraPluginLess.loader,
-					'css-loader',
-					'postcss-loader',
-					'less-loader'
-				],
-				exclude: /node_modules/
-			}
+        test: /\.css$/,
+        loader: [
+          MiniCSSExtraPlugin.loader,
+          'css-loader',
+          'postcss-loader'
+        ],
+        exclude: /node_modules/
+      },
+      {
+        test: /\.less$/,
+        loader: [
+          MiniCSSExtraPluginLess.loader,
+          'css-loader',
+          'postcss-loader',
+          'less-loader'
+        ],
+        exclude: /node_modules/
+      }
     ]
   }
 };
@@ -133,18 +133,18 @@ const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
 
 module.exports = {
   optimization: {
-		minimizer: [
-			new OptimizeCSSAssetsPlugin(),
-			new UglifyJSPlugin({
-				// 使用缓存
-				cache: true,
-				// 并发
-				parallel: true,
-				// 生成 sourceMap 文件
-				sourceMap: true
-			})
-		]
-	}
+    minimizer: [
+      new OptimizeCSSAssetsPlugin(),
+      new UglifyJSPlugin({
+        // 使用缓存
+        cache: true,
+        // 并发
+        parallel: true,
+        // 生成 sourceMap 文件
+        sourceMap: true
+      })
+    ]
+  }
 }
 ```
 
@@ -160,7 +160,7 @@ module.exports = {
 
 ```json
 {
-  "presets": ["@babel/preset-env"],
+  "presets": ["@babel/preset-env", "@babel/preset-react"],
   "plugins": [
     [
       "@babel/plugin-proposal-decorators",
@@ -174,7 +174,16 @@ module.exports = {
         "loose": true
       }
     ],
-    "@babel/plugin-transform-runtime"
+    [
+      "@babel/plugin-transform-runtime",
+      {
+        "builtins": "usage",
+        "corejs": {
+          "version": 3
+        }
+      }
+    ],
+    "@babel/plugin-syntax-dynamic-import"
   ]
 }
 ```
@@ -185,32 +194,32 @@ module.exports = {
 
 + 关于 @babel/polyfill 和 @babel/plugin-transform-runtime
 	+ @babel/polyfill 是一个垫片，Babel 不转化 JS 新的 API，比如 Iterator、Generator、Set、Maps 等全局对象，如果我们要使用这些新的对象和方法，就需要使用 @babel/polyfill
-	+ @babel/plugin-transform-runtime 是一个一个辅助函数库，因为 babel 编译后的代码，要实现和源代码一样的功能，需要一些函数库，所以需要使用 @babel/plugin-transform-runtime，而使用这个库还需要 @babel/runtime 库
+	+ @babel/plugin-transform-runtime 是一个辅助函数库，因为 babel 编译后的代码，要实现和源代码一样的功能，需要一些函数库，所以需要使用 @babel/plugin-transform-runtime，而使用这个库还需要 @babel/runtime 库，目前来说，polyfill 已经被废弃掉了，现在直接使用 @babel/plugin-transform-runtime 即可，还需要 @babel/runtime 和 @babel/runtime-corejs3 这两个库。
 
 # 4. eslint 的配置
 
 + eslint 的目的是为了提高代码的书写规范，提高代码质量
 
-+ eslint 需要使用到 eslint 和 eslint-loader 连个包，`npm i eslint eslint-loader -D`
++ eslint 需要使用到 eslint 和 eslint-loader 两个包，`npm i eslint eslint-loader -D`
 
 + 在 webpack 里配置 loader，这里的 enforce 的意思是，要在其他的 loader 解析之前先校验 JS 代码
 
 ```javascript
 module.exports = {
-	module: {
-	  rules: [
-	     {
-				test: /\.js$/,
-				use: {
-					loader: 'eslint-loader',
-					options: {
-						enforce: 'pre'
-					}
-				}
-			}
-	  ]
-	}
-}
+  module: {
+    rules: [
+      {
+        test: /\.js$/,
+        use: {
+          loader: 'eslint-loader',
+          options: {
+            enforce: 'pre'
+          }
+        }
+      }
+    ]
+  }
+};
 ```
 
 + 根目录下新建一个 .eslintrc 的文件，具体每一条规范是什么意思，如何使用，可以直接查看[官网](https://eslint.org)

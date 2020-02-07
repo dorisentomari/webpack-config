@@ -6,6 +6,7 @@ const MiniCSSExtraPlugin = require('mini-css-extract-plugin');
 const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 // 优化打包后的 JS 代码
 const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
+const Webpack = require('webpack');
 
 module.exports = {
   mode: 'development',
@@ -25,7 +26,9 @@ module.exports = {
     // 指向某个目录为静态服务文件夹
     contentBase: './dist',
     // 是否开启 gzip 压缩
-    compress: true
+    compress: true,
+    // 是否开启热更新
+    hot: true
   },
   module: {
     rules: [
@@ -116,7 +119,8 @@ module.exports = {
     }),
     new MiniCSSExtraPlugin({
       filename: 'main.css'
-    })
+    }),
+    new Webpack.HotModuleReplacementPlugin()
   ],
   optimization: {
     minimizer: [

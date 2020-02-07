@@ -1,6 +1,6 @@
 (function (modules) { // webpackBootstrap
-                      // The module cache
-                      // 定义缓存
+  // The module cache
+  // 定义缓存
   var installedModules = {};
 
   // The require function

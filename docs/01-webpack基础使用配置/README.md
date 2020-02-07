@@ -49,12 +49,14 @@ module.exports = {
 
 + 所以我们采用 webpack-dev-server 这个包，用来开启本地服务，把打包后的内容都放在内存里，这样不影响我们使用，也不会生成文件，打包的速度就很快
 
-+ 我们配置一下 webpack.config.js，添加 devServer 的配置项 
++ 我们配置一下 webpack.config.js，添加 devServer 的配置项
 	+ host，指定 IP
 	+ port，指定服务的端口
 	+ progress，是否开启打包时进度条的显示
 	+ contentBase，指向某个目录为静态服务文件夹
 	+ compress，是否开启 gzip 压缩
+	+ hot，是否开启热更新
+	    + 如果 hot 为 true，那么还需要注册 `new Webpack.HotModuleReplacementPlugin()` 这个 plugin
 
 ```javascript
 module.exports = {
@@ -68,7 +70,9 @@ module.exports = {
 	// 指向某个目录为静态服务文件夹
 	contentBase: './dist',
 	// 是否开启 gzip 压缩
-	compress: true
+	compress: true,
+    // 是否开启热更新
+    hot: true
   }
 }
 ```
@@ -137,23 +141,23 @@ module.exports = {
 
 ```javascript
 module.exports = {
-module: {
-	rules: [
-		{
-			test: /\.css$/,
-			use: [
-				{
-					loader: 'style-loader',
-					options: {
-						insertAt: 'top'
-					}
-				}, 
-				'css-loader'
-				],
-				exclude: /node_modules/
-			}
-		]
-	}		
+  module: {
+    rules: [
+      {
+        test: /\.css$/,
+        use: [
+          {
+            loader: 'style-loader',
+            options: {
+              insertAt: 'top'
+            }
+          },
+          'css-loader'
+        ],
+        exclude: /node_modules/
+      }
+    ]
+  }
 };
 ```
 
@@ -168,64 +172,64 @@ module: {
 module.exports = {
   module: {
     rules: [
-			{
-			 test: /\.css$/,
-			 use: [
-				 {
-					 loader: 'style-loader',
-					 options: {
-						 insertAt: 'top'
-					 }
-				 },
-				 'css-loader'
-			 ],
-			 exclude: /node_modules/
-			},
-			{
-			 test: /\.less$/,
-			 use: [
-				 {
-					 loader: 'style-loader',
-					 options: {
-						 insertAt: 'top'
-					 }
-				 },
-				 'css-loader',
-				 'less-loader'
-			 ],
-			 exclude: /node_modules/
-			},
-			{
-			 test: /\.styl$/,
-			 use: [
-				 {
-					 loader: 'style-loader',
-					 options: {
-						 insertAt: 'top'
-					 }
-				 },
-				 'css-loader',
-				 'stylus-loader'
-			 ],
-			 exclude: /node_modules/
-			},
-			{
-			 test: /\.scss$/,
-			 use: [
-				 {
-					 loader: 'style-loader',
-					 options: {
-						 insertAt: 'top'
-					 }
-				 },
-				 'css-loader',
-				 'sass-loader'
-			 ],
-			 exclude: /node_modules/
-			}
+      {
+        test: /\.css$/,
+        use: [
+          {
+            loader: 'style-loader',
+            options: {
+              insertAt: 'top'
+            }
+          },
+          'css-loader'
+        ],
+        exclude: /node_modules/
+      },
+      {
+        test: /\.less$/,
+        use: [
+          {
+            loader: 'style-loader',
+            options: {
+              insertAt: 'top'
+            }
+          },
+          'css-loader',
+          'less-loader'
+        ],
+        exclude: /node_modules/
+      },
+      {
+        test: /\.styl$/,
+        use: [
+          {
+            loader: 'style-loader',
+            options: {
+              insertAt: 'top'
+            }
+          },
+          'css-loader',
+          'stylus-loader'
+        ],
+        exclude: /node_modules/
+      },
+      {
+        test: /\.scss$/,
+        use: [
+          {
+            loader: 'style-loader',
+            options: {
+              insertAt: 'top'
+            }
+          },
+          'css-loader',
+          'sass-loader'
+        ],
+        exclude: /node_modules/
+      }
     ]
   }
-}
+};
 ```
 
 + 这样，我们就实现了 webpack 对 css 及预处理器的处理

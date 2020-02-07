@@ -13,7 +13,15 @@
         "loose": true
       }
     ],
-    "@babel/plugin-transform-runtime",
+    [
+      "@babel/plugin-transform-runtime",
+      {
+        "builtins": "usage",
+        "corejs": {
+          "version": 3
+        }
+      }
+    ],
     "@babel/plugin-syntax-dynamic-import"
   ]
 }
